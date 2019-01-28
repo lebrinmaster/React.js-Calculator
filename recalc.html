@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Calculating With React</title>
+  </head>
+  <body>
+
+  <div id="container"></div>
+
+  <!-- External resources for Recalc Application -->
+  <link rel="stylesheet" href="recalc.css">
+  <script src="build/react.js"></script>
+  <script src="build/react-dom.js"></script>
+  <script src="build/browser.js"></script>
+
+  <!-- React code starts here -->
+  <script type="text/babel">
+
+    class CalcDisplay extends React.Component{
+
+      static get defaultProps(){
+        return{
+          displayNumber: 99
+        };
+      }
+
+      render(){
+        return(
+          <div className="calcDisplay">
+            {this.props.displayNumber }
+            </div>
+        );
+      }
+    }
+
+    class CalcButton extends React.Component{
+
+      constructor(props){
+        super(props);
+        this.handleClick = this.handleClick.bind(this);
+      }
+
+      handleClick(){
+        this.props.reportButtonPress(this.props.value);
+      }
+
+      render(){
+
+      return(
+        <div className="calcButton" onClick={this.handleClick}>
+          {this.props.value}
+        </div>
+      );
+      }
+    }
+
+		class Calculator extends React.Component{
+
+      static get defaultState(){
+        return{ 
+          operand1: undefined,
+          operation: undefined,
+          newNumberFlg: true,
+          displayNumber: "0" 
+        };
+      }
+      
+
+      constructor(props){
+        super(props);
+
+        this.state = Calculator.defaultState;
+     
+        this.updateNumber = this.updateNumber.bind(this);
+        this.prepCalc = this.prepCalc.bind(this);
+        this.doCalc = this.doCalc.bind(this);
+        this.doClear = this.doClear.bind(this);
+      }
+
+      updateNumber(value){
+
+        /*Чтобы убирался ноль, на число, на которое мы нажали*/
+        let newDisplayNumber;
+
+        if( this.state.newNumberFlg ){
+          newDisplayNumber = value;
+        } else{
+          newDisplayNumber = this.state.displayNumber + value;
+        }
+        this.setState({
+          newNumberFlg: false,
+          displayNumber: newDisplayNumber 
+        });
+      }
+
+      prepCalc(operation){ /*Функция сложения*/
+        this.setState({
+          operation: operation,
+          operand1: this.state.displayNumber,
+          newNumberFlg: true
+        });
+      }
+
+      doCalc(){
+        let newDisplayNumber =0;
+        switch (this.state.operation) {
+          case '+':
+            newDisplayNumber = parseFloat(this.state.operand1) + parseFloat(this.state.displayNumber);
+            break;
+          case '-':
+            newDisplayNumber = parseFloat(this.state.operand1) - parseFloat(this.state.displayNumber);
+            break;
+          case '/':
+            newDisplayNumber = parseFloat(this.state.operand1) / parseFloat(this.state.displayNumber);
+            break;
+          case '*':
+            newDisplayNumber = parseFloat(this.state.operand1) * parseFloat(this.state.displayNumber);
+            break;
+          default:
+            break;
+        }
+
+        this.setState({
+          operation: undefined,
+          operand1: undefined,
+          displayNumber: newDisplayNumber
+        });
+      }
+
+      doClear() {
+        this.setState(Calculator.defaultState);
+      }
+
+      shouldComponentUpdate(nextProps, nextState){
+        if( this.state.deisplayNumber === nextState.displayNumber){
+          return false;
+        } else{
+          return true;
+        }
+      }
+
+      render(){
+        return(
+          <div className="calculator">
+            <CalcDisplay displayNumber={ this.state.displayNumber } />
+              <div>
+                  <CalcButton value="1" reportButtonPress={this.updateNumber} />
+                  <CalcButton value="2" reportButtonPress={this.updateNumber} />
+                  <CalcButton value="3" reportButtonPress={this.updateNumber} />
+                  <CalcButton value="/" reportButtonPress={this.prepCalc} />
+              </div>
+              <div>
+                  <CalcButton value="4" reportButtonPress={this.updateNumber} />
+                  <CalcButton value="5" reportButtonPress={this.updateNumber} />
+                  <CalcButton value="6" reportButtonPress={this.updateNumber} />
+                  <CalcButton value="*" reportButtonPress={this.prepCalc} />
+              </div>
+              <div>
+                  <CalcButton value="7" reportButtonPress={this.updateNumber} />
+                  <CalcButton value="8" reportButtonPress={this.updateNumber} />
+                  <CalcButton value="9" reportButtonPress={this.updateNumber} />
+                  <CalcButton value="-" reportButtonPress={this.prepCalc} />
+              </div>
+              <div>
+                  <CalcButton value="C" reportButtonPress={this.doClear} />
+                  <CalcButton value="0" reportButtonPress={this.updateNumber} />
+                  <CalcButton value="=" reportButtonPress={this.doCalc} />
+                  <CalcButton value="+" reportButtonPress={this.prepCalc} />
+              </div>
+            </div>
+          );
+        }
+      }
+ReactDOM.render(
+  <Calculator/>, document.getElementById('container')
+  );
+	</script>
+
+  </body>
+</html>

@@ -1,0 +1,53 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto+Mono:400,500,700);
+@import url(https://fonts.googleapis.com/css?family=Lato:400,700,300);
+
+html {
+	font-family: 'Lato', sans-serif;
+	font-size: 14pt;
+}
+
+#content {
+	width: 25%;
+	display: inline-block;
+	vertical-align:top;
+}
+
+h1 {
+	margin:0;
+	font-size:48px;
+}
+
+#container {
+	display: inline-block;
+	font-size:33px;
+}
+
+.calculator {
+	border: 1px solid #ddd;
+	margin: 0 auto;
+	display: inline-block;
+	font-family: 'Roboto Mono', 'Courier New', monospace;
+}
+
+.calcButton{
+	display: inline-block;
+	text-align: center;
+	background-color: #eee;
+	padding: 14px;
+	margin: 3px;
+}
+
+.calcButton:hover{
+	background-color: #ccc;
+	cursor: pointer;
+}
+
+.calcDisplay{
+	background-color: #0cf;
+	color: #6ff;
+	padding: 5px;
+	margin: 3px;
+	max-width:6em;
+	text-align:right;
+	overflow: hidden;
+}
